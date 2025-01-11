@@ -43,7 +43,20 @@ const gameboard = (function (){
         gameboard.printBoard();
     };
 
-   return {updateBoard, resetBoard, printBoard, getBoardPosition};
+    const checkMarks = ()=>{
+        let isInBoard = [];
+        board.forEach(positionMark => {
+            if(positionMark === "X" || positionMark === "O"){
+                isInBoard.push(true);
+            }else{
+                isInBoard.push(false);
+            }
+        });
+        console.log(isInBoard);
+        return isInBoard;
+    }
+
+   return {updateBoard, resetBoard, printBoard, getBoardPosition, checkMarks};
 })();
 
 
@@ -71,15 +84,17 @@ const playGame = (function(){
         console.log(activePlayer);
         gameboard.updateBoard(activePlayer, position);
         if(checkWinner(activePlayer)){
-            console.log(activePlayer.name + ' won the game');
+            console.log(`${activePlayer.name} won the game`);
             gameboard.resetBoard();
-
+        }else if(checkTie(activePlayer)){
+            console.log('Tie');
+            gameboard.resetBoard();
         }
     };
 
     const checkWinner = (player) => {
         let roundWon = false;
-
+        //make a draw way to see if it ended in a draw.
         for(i = 0 ; i < winConditions.length; i++){
             const condition = winConditions[i];
             const firstCell = gameboard.getBoardPosition(condition[0]);
@@ -98,6 +113,33 @@ const playGame = (function(){
         return roundWon;
     }
 
-    return{addPlayer, playerPlay, checkWinner};
+    const checkTie = (player) => {
+        let isTie = false;
+        let index = 0;
+        let marksOnBoard = gameboard.checkMarks();
+        marksOnBoard.forEach(markCheck =>{
+            if(markCheck){
+                index += 1;
+            }
+        })
+        if(index == 9){
+            isTie = true;
+        };
+        return isTie;
+    }
+
+    const tie = ()=>{
+        playerPlay(players[0].name, 0);
+        playerPlay(players[1].name, 1);
+        playerPlay(players[0].name, 4);
+        playerPlay(players[1].name, 2);
+        playerPlay(players[0].name, 5);
+        playerPlay(players[1].name, 3);
+        playerPlay(players[0].name, 6);
+        playerPlay(players[1].name, 8);
+        playerPlay(players[0].name, 7);
+    }
+
+    return{addPlayer, playerPlay, checkWinner, checkTie, tie};
 })();
 
