@@ -1,4 +1,94 @@
 body{
     background-color: black;
     color: white;
+    border-color: white;
+    margin: 0;
+    padding: 0;
+    height: 90vh;
+    width: 100vw;
+}
+
+.layout{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    padding: 2%;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.optionsContainer{
+    width: 100%;
+    height: 10vh;
+    margin-block: 1%;
+}
+
+form{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 4%;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    padding-inline: 2%;
+}
+
+#textInput1{
+    grid-column: 2/4;
+    grid-row: 1/2;
+    
+}
+
+#textInput2{
+    grid-column: 5/7;
+    grid-row: 1/2;
+}
+
+.btnsContainer{
+    grid-column: 3/5;
+    grid-row: 2/3;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    gap: 5%;
+    margin-top: 3%;
+}
+
+#playBtn{
+    width: 30%;
+
+}
+
+#restartBtn{
+    width: 30%;
+}
+
+/*[id^='playPlayer']{
+    grid-column: 3/4;
+    grid-row: 2/3;
+    height: 60%;
+    width: 80%;
+    margin: 5%;
+}*/
+
+.gameBoard{
+    width: 100%;
+    height: 75vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    border: 2px solid white;
+    border-collapse: collapse;
+}
+
+[id^='box']{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    height: 1fr;
+    padding-top: 20%;
+    font-size: 4rem;
+    border: 2px solid white;
 }

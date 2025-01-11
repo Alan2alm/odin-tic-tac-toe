@@ -1,10 +1,9 @@
 //3 objects, 1 for the gameboard, 1 for the players and 1 to control the flow of the game.
 //store the gameboard as an array
-//tic tac toe = es el juego de los X y O, donde tienen que hacer una linea de 3, 
-// en cuanquier direccion siempre y cuando sea una recta
+//tic tac toe = is the game with X and O, where you have to make a line of 3, 
+// in any direction as long as it is a straight line
 //numb decides if the player uses X or O, player 1 = X, player 2 = O
-//crear la funcion industrial gameboard y crear el objeto dentro de playGame para usarlo y crear las distintas funciones 
-// sin que se puedan cambiar variables desde fuera de playGame (encapsularlo)
+
 function createPlayer(name, mark){
     var name = name;
     var mark = mark;
@@ -21,7 +20,7 @@ const gameboard = (function (){
     const getBoardPosition = (i) => {
         return board[i];
     }
-    
+    //use and change printBoard to print it in the html using DOM.
     const printBoard = () => {
         console.log("---------------");
         console.log("|" + board[0] + " | " + board[1] + " | " + board[2] + "|");
@@ -29,7 +28,7 @@ const gameboard = (function (){
         console.log("|" + board[6] + " | " + board[7] + " | " + board[8] + "|");
         console.log("---------------");
     }
-
+    //change it to update the text in the container element in the html using DOM.
     const updateBoard = (player, x) =>{
         if(board[x] === ""){
             board[x] = player.mark;
@@ -62,13 +61,12 @@ const gameboard = (function (){
 
 const playGame = (function(){
     let players = [];
-    //let gameOver;
     const winConditions = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
     const addPlayer = (newPlayer) => {
-        if(players.length == 0){
+        if(newPlayer.mark === "X"){
             players[0] = newPlayer;
             console.log("Player 1 added");
-        }else{
+        }else if(newPlayer.mark === "O"){
             players[1] = newPlayer;
             console.log("Player 2 added");
         }
@@ -94,7 +92,6 @@ const playGame = (function(){
 
     const checkWinner = (player) => {
         let roundWon = false;
-        //make a draw way to see if it ended in a draw.
         for(i = 0 ; i < winConditions.length; i++){
             const condition = winConditions[i];
             const firstCell = gameboard.getBoardPosition(condition[0]);
@@ -128,7 +125,7 @@ const playGame = (function(){
         return isTie;
     }
 
-    const tie = ()=>{
+    /*const tie = ()=>{
         playerPlay(players[0].name, 0);
         playerPlay(players[1].name, 1);
         playerPlay(players[0].name, 4);
@@ -138,8 +135,8 @@ const playGame = (function(){
         playerPlay(players[0].name, 6);
         playerPlay(players[1].name, 8);
         playerPlay(players[0].name, 7);
-    }
+    }*/
 
-    return{addPlayer, playerPlay, checkWinner, checkTie, tie};
+    return{addPlayer, playerPlay, checkWinner, checkTie/*, tie*/};
 })();
 

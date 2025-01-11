@@ -8,9 +8,30 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div>
-        <div class="btnsContainer"><button id=""></button><button></button></div>
-        <div ></div>
+    <div class="layout">
+        <div class="optionsContainer">
+            <form method="get" id="newPlayerForm1">
+                <label for="namePlayer">Name of player 1*</label>
+                <input type="text" name="namePlayer" id="textInput1" required>
+                <label for="namePlayer">Name of player 2*</label>
+                <input type="text" name="namePlayer" id="textInput2" required>
+                <div class="btnsContainer">
+                    <input type="submit" value="Play" id="playBtn">
+                    <input type="reset" value="Restart" id="restartBtn">
+                </div>
+            </form>
+        </div>
+        <div class="gameBoard">
+            <div id="box1">X</div>
+            <div id="box2">X</div>
+            <div id="box3">O</div>
+            <div id="box4">O</div>
+            <div id="box5">O</div>
+            <div id="box6">X</div>
+            <div id="box7">O</div>
+            <div id="box8">X</div>
+            <div id="box9">X</div>
+        </div>
     </div>
 </body>
 </html>
