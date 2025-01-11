@@ -6,6 +6,7 @@
 const playBtn = document.querySelector("#playBtn");
 const restartBtn = document.querySelector("#restartBtn");
 
+
 function createPlayer(name, mark){
     var name = name;
     var mark = mark;
@@ -19,7 +20,6 @@ const player2 = createPlayer("Enzo", "O");
 const gameboard = (function (){
     let board = [];
 
-    
     const prepareBoard = () =>{
         board = document.querySelectorAll("[id^=box-]");
         board.forEach(box => {
@@ -79,12 +79,15 @@ const gameboard = (function (){
 
 const playGame = (function(){
     let players = [];
+    const pointsP = [document.querySelector("#player1-points"), document.querySelector("#player2-points")];
     let isPlaying = 0; //who turn is, 0 = player 1, 1 = player 2.
     let running = false;
     const winConditions = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
     const startGame = () => {
         players[0] = createPlayer(document.querySelector("#textInput1").value, "X");
         players[1] = createPlayer(document.querySelector("#textInput2").value, "O");
+        pointsP[0].textContent = 0;
+        pointsP[1].textContent = 0;
         isPlaying = 0;
         running = true;
         //changed prepareBoard() for resetBoard because it was adding new eventListener functions to the mark boxes
@@ -94,6 +97,8 @@ const playGame = (function(){
     const restartGame = () => {
         gameboard.resetBoard();
         players = [];
+        pointsP[0].textContent = 0;
+        pointsP[1].textContent = 0;
         isPlaying = 0;
         running = false;
     };
@@ -140,6 +145,7 @@ const playGame = (function(){
             }else if( player.mark == firstCell && firstCell == SecondCell && SecondCell == ThirdCell){
                 roundWon = true;
                 player.points += 1;
+                pointsP[(players.indexOf(player))].textContent = player.points;
                 break;
             }
         }

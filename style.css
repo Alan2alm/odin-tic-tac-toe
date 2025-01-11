@@ -13,7 +13,7 @@ body{
     flex-direction: column;
     align-content: center;
     justify-content: center;
-    padding: 2%;
+    padding: 1%;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
@@ -24,6 +24,23 @@ body{
     display: flex;
     flex-direction: column;
 }
+
+.pointsContainer{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    gap: 5%;
+}
+
+.pointsContainer > div{
+    display: flex;
+    width: 10%;
+    gap: 5%;
+}
+
 
 form{
     display: grid;
@@ -84,4 +101,14 @@ form{
     height: 1fr;
     font-size: 11rem;
     border: 2px solid white;
+}
+
+#playerlabel{
+    font-weight: 900;
+    color: aqua;
+}
+
+[id$="-points"]{
+    font-weight: 900;
+    font-size: 1rem;
 }
