@@ -3,6 +3,8 @@
 //tic tac toe = is the game with X and O, where you have to make a line of 3, 
 // in any direction as long as it is a straight line
 //numb decides if the player uses X or O, player 1 = X, player 2 = O
+const playBtn = document.querySelector("#playBtn");
+const restartBtn = document.querySelector("#restartBtn");
 
 function createPlayer(name, mark){
     var name = name;
@@ -15,37 +17,48 @@ const player1 = createPlayer("Alan", "X");
 const player2 = createPlayer("Enzo", "O");
 
 const gameboard = (function (){
-    let board = ["", "", "", "", "", "", "", "", ""];
+    let board = [];
 
-    const getBoardPosition = (i) => {
-        return board[i];
-    }
-    //use and change printBoard to print it in the html using DOM.
-    const printBoard = () => {
-        console.log("---------------");
-        console.log("|" + board[0] + " | " + board[1] + " | " + board[2] + "|");
-        console.log("|" + board[3] + " | " + board[4] + " | " + board[5] + "|");
-        console.log("|" + board[6] + " | " + board[7] + " | " + board[8] + "|");
-        console.log("---------------");
-    }
+    
+    const prepareBoard = () =>{
+        board = document.querySelectorAll("[id^=box-]");
+        board.forEach(box => {
+            box.textContent = "";
+            console.log(box);
+            box.addEventListener('click', ()=>{
+                console.log("Hizo click en la posicion");
+                playGame.playerPlay(box);
+            });
+        });
+        console.log("Board prepared");
+        console.log(board);
+    };
+
     //change it to update the text in the container element in the html using DOM.
-    const updateBoard = (player, x) =>{
-        if(board[x] === ""){
-            board[x] = player.mark;
+    const updateBoard = (position, player) =>{
+        let index;
+        for (i=0; i < board.length; i++){
+            if(position === board[i]){
+                index = i;
+                break;
+            }
+        }
+        if(board[index].textContent === ""){
+            board[index].textContent = player.mark;
             console.log(player.mark);
         }else{console.log("Already Played")};
-        gameboard.printBoard();
     };
 
     const resetBoard = ()=>{
-        board = ["", "", "", "", "", "", "", "", ""];
-        gameboard.printBoard();
+        board.forEach(box => {
+            box.textContent = "";
+        });
     };
 
     const checkMarks = ()=>{
         let isInBoard = [];
         board.forEach(positionMark => {
-            if(positionMark === "X" || positionMark === "O"){
+            if(positionMark.textContent === "X" || positionMark.textContent === "O"){
                 isInBoard.push(true);
             }else{
                 isInBoard.push(false);
@@ -53,50 +66,74 @@ const gameboard = (function (){
         });
         console.log(isInBoard);
         return isInBoard;
-    }
+    };
 
-   return {updateBoard, resetBoard, printBoard, getBoardPosition, checkMarks};
+    const getBoardMark = (i) => {
+
+        return board[i].textContent;
+    };
+
+   return {updateBoard, resetBoard, getBoardMark, checkMarks, prepareBoard};
 })();
 
 
 const playGame = (function(){
     let players = [];
+    let isPlaying = 0; //who turn is, 0 = player 1, 1 = player 2.
+    let running = false;
     const winConditions = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]];
-    const addPlayer = (newPlayer) => {
-        if(newPlayer.mark === "X"){
-            players[0] = newPlayer;
-            console.log("Player 1 added");
-        }else if(newPlayer.mark === "O"){
-            players[1] = newPlayer;
-            console.log("Player 2 added");
-        }
+    const startGame = () => {
+        players[0] = createPlayer(document.querySelector("#textInput1").value, "X");
+        players[1] = createPlayer(document.querySelector("#textInput2").value, "O");
+        isPlaying = 0;
+        running = true;
+        //changed prepareBoard() for resetBoard because it was adding new eventListener functions to the mark boxes
+        gameboard.resetBoard();
     };
-    const playerPlay = (name, position) => {
-        let activePlayer;
-        players.forEach(player => {
-            if (name === player.name){
-                return activePlayer = player;
+
+    const restartGame = () => {
+        gameboard.resetBoard();
+        players = [];
+        isPlaying = 0;
+        running = false;
+    };
+
+    const playerPlay = (position) => {
+        if(position.textContent === "" && running === true){
+            console.log(players[isPlaying]);
+            gameboard.updateBoard(position, players[isPlaying]);
+            
+            if(checkWinner(players[isPlaying])){
+                if(players[isPlaying].points == 3){
+                    alert(`${players[isPlaying].name} won the 3 games, congratulations!`);
+                    players[0].points = 0;
+                    players[1].points = 0;
+                    restartGame();
+                }else{
+                    alert(`${players[isPlaying].name} won the game`);
+                    isPlaying = 0;
+                    gameboard.resetBoard();
+                }
                 
-            }
-        });
-        console.log(activePlayer);
-        gameboard.updateBoard(activePlayer, position);
-        if(checkWinner(activePlayer)){
-            console.log(`${activePlayer.name} won the game`);
-            gameboard.resetBoard();
-        }else if(checkTie(activePlayer)){
-            console.log('Tie');
-            gameboard.resetBoard();
-        }
+                
+            }else if(checkTie(players[isPlaying])){
+                alert("Tie!");
+                gameboard.resetBoard();
+                isPlaying = 0;
+            }else{
+                (isPlaying == 0)?isPlaying = 1:isPlaying = 0;
+            };
+        };
+        
     };
 
     const checkWinner = (player) => {
         let roundWon = false;
         for(i = 0 ; i < winConditions.length; i++){
             const condition = winConditions[i];
-            const firstCell = gameboard.getBoardPosition(condition[0]);
-            const SecondCell = gameboard.getBoardPosition(condition[1]);
-            const ThirdCell = gameboard.getBoardPosition(condition[2]);
+            const firstCell = gameboard.getBoardMark(condition[0]);
+            const SecondCell = gameboard.getBoardMark(condition[1]);
+            const ThirdCell = gameboard.getBoardMark(condition[2]);
 
             if(firstCell == "" || SecondCell == "" || ThirdCell == ""){
                 continue;
@@ -110,7 +147,7 @@ const playGame = (function(){
         return roundWon;
     }
 
-    const checkTie = (player) => {
+    const checkTie = () => {
         let isTie = false;
         let index = 0;
         let marksOnBoard = gameboard.checkMarks();
@@ -125,18 +162,19 @@ const playGame = (function(){
         return isTie;
     }
 
-    /*const tie = ()=>{
-        playerPlay(players[0].name, 0);
-        playerPlay(players[1].name, 1);
-        playerPlay(players[0].name, 4);
-        playerPlay(players[1].name, 2);
-        playerPlay(players[0].name, 5);
-        playerPlay(players[1].name, 3);
-        playerPlay(players[0].name, 6);
-        playerPlay(players[1].name, 8);
-        playerPlay(players[0].name, 7);
-    }*/
-
-    return{addPlayer, playerPlay, checkWinner, checkTie/*, tie*/};
+    return{startGame, playerPlay, checkWinner, checkTie, restartGame};
 })();
 
+gameboard.prepareBoard();
+
+//initialize the IIFE playgame.
+playBtn.addEventListener('click', (event)=>{
+    event.preventDefault();
+    playGame.startGame();
+});
+
+//restart all values from gameboard and playgame.
+restartBtn.addEventListener('click', ()=>{
+    playGame.restartGame();
+    alert("Game restarted, please insert the players name.");
+});
